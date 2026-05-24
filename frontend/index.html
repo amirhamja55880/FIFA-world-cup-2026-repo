@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WorldCup2026.live - লাইভ খেলা দেখুন</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LIVE TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-content" id="tickerContent">
+    <span>🏆 FIFA World Cup 2026 — ১১ জুন থেকে ১৯ জুলাই</span>
+    <span class="dot">●</span>
+    <span>📺 BBC iPlayer ও ITV Hub-এ সব ম্যাচ ফ্রিতে দেখুন</span>
+    <span class="dot">●</span>
+    <span>🇺🇸 USA | 🇨🇦 Canada | 🇲🇽 Mexico — মোট ১০৪টি ম্যাচ</span>
+    <span class="dot">●</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">⚽</div>
+      <div>
+        <div class="logo-text">WORLDCUP<span>2026</span></div>
+        <div class="logo-sub">LIVE • SCORE • SCHEDULE</div>
+      </div>
+    </a>
+    <nav id="mainNav">
+      <a href="#home" class="active">🏠 হোম</a>
+      <a href="#watch" class="live-btn">🔴 লাইভ দেখুন</a>
+      <a href="#score">⚽ স্কোর</a>
+      <a href="#schedule">📅 সিডিউল</a>
+      <a href="#standings">🏆 পয়েন্ট টেবিল</a>
+      <a href="#vpnguide">📡 কিভাবে দেখবেন</a>
+    </nav>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-badge"><div class="live-dot"></div>LIVE NOW — FIFA WORLD CUP 2026</div>
+    <h1>
+      <div class="white">বিশ্বকাপ</div>
+      <div class="red">২০২৬</div>
+      <div class="gold">লাইভ দেখুন</div>
+    </h1>
+    <p class="hero-sub">বাংলাদেশ থেকে সরাসরি FIFA World Cup 2026 দেখুন। লাইভ স্কোর, সিডিউল, পয়েন্ট টেবিল সব এক জায়গায়।</p>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:600;">⏳ বিশ্বকাপ শুরু হতে বাকি:</div>
+    <div class="countdown-wrap" id="countdown"></div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num">48</div><div class="stat-label">দেশ</div></div>
+      <div class="stat-item"><div class="stat-num">104</div><div class="stat-label">ম্যাচ</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">দেশে আয়োজন</div></div>
+      <div class="stat-item"><div class="stat-num">39</div><div class="stat-label">দিনের টুর্নামেন্ট</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE SCORE STRIP -->
+<div class="live-strip" id="score">
+  <div class="live-strip-inner" id="liveScoreStrip"></div>
+</div>
+
+<!-- LIVE WATCH SECTION -->
+<section class="section" id="watch">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-title"><span class="icon">📺</span>লাইভ খেলা দেখুন</div>
+    </div>
+    <div class="vpn-banner">
+      <div class="vpn-icon">🔒</div>
+      <div class="vpn-text">
+        <h3>VPN ছাড়া লাইভ দেখতে পাচ্ছেন না?</h3>
+        <p>BBC iPlayer ও ITV Hub দেখতে VPN লাগবে। NordVPN দিয়ে UK server-এ connect করুন।</p>
+      </div>
+      <button class="vpn-btn" onclick="openVpnGuide()">⚡ VPN গাইড দেখুন</button>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'hd')">📺 HD স্ট্রিম</button>
+      <button class="tab-btn" onclick="switchTab(this,'multi')">📡 মাল্টি স্ট্রিম</button>
+      <button class="tab-btn" onclick="switchTab(this,'mobile')">📱 মোবাইল</button>
+      <button class="tab-btn" onclick="switchTab(this,'free')">🆓 ফ্রি</button>
+    </div>
+    <div class="tab-content active" id="tab-hd"><div class="watch-grid" id="watchGrid-hd"></div></div>
+    <div class="tab-content" id="tab-multi"><div class="watch-grid" id="watchGrid-multi"></div></div>
+    <div class="tab-content" id="tab-mobile">
+      <div class="mobile-stream-box">
+        <div style="font-size:50px;margin-bottom:16px;">📱</div>
+        <h3>মোবাইলে লাইভ দেখুন</h3>
+        <p>মোবাইলে BBC iPlayer বা ITV Hub App ডাউনলোড করুন। VPN App দিয়ে UK server connect করুন।</p>
+        <button class="watch-action" onclick="openVpnGuide()">📱 মোবাইল গাইড দেখুন</button>
+      </div>
+    </div>
+    <div class="tab-content" id="tab-free">
+      <div class="watch-grid" id="watchGrid-free"></div>
+      <div class="info-box yellow">ℹ️ ফ্রি স্ট্রিমে কিছু ম্যাচ পাওয়া যাবে। সব ম্যাচ দেখতে BBC iPlayer বা ITV Hub ব্যবহার করুন।</div>
+    </div>
+    <div class="ad-banner">📢 Google AdSense — এখানে আপনার বিজ্ঞাপন দেখাবে</div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section class="section bg-dark2" id="schedule">
+  <div class="section-inner">
+    <div class="section-header"><div class="section-title"><span class="icon">📅</span>ম্যাচ সিডিউল</div></div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchScheduleTab(this,'today')">⚡ আজকের ম্যাচ</button>
+      <button class="tab-btn" onclick="switchScheduleTab(this,'tomorrow')">📅 আগামীকাল</button>
+      <button class="tab-btn" onclick="switchScheduleTab(this,'week')">📆 এই সপ্তাহ</button>
+    </div>
+    <div id="scheduleContent"></div>
+  </div>
+</section>
+
+<!-- STANDINGS -->
+<section class="section" id="standings">
+  <div class="section-inner">
+    <div class="section-header"><div class="section-title"><span class="icon">🏆</span>পয়েন্ট টেবিল</div></div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchGroupTab(this,'A')">গ্রুপ A</button>
+      <button class="tab-btn" onclick="switchGroupTab(this,'B')">গ্রুপ B</button>
+      <button class="tab-btn" onclick="switchGroupTab(this,'C')">গ্রুপ C</button>
+      <button class="tab-btn" onclick="switchGroupTab(this,'D')">গ্রুপ D</button>
+      <button class="tab-btn" onclick="switchGroupTab(this,'E')">গ্রুপ E</button>
+      <button class="tab-btn" onclick="switchGroupTab(this,'F')">গ্রুপ F</button>
+    </div>
+    <div id="standingsContent"></div>
+  </div>
+</section>
+
+<!-- VPN GUIDE -->
+<section class="section bg-dark2" id="vpnguide">
+  <div class="section-inner">
+    <div class="section-header"><div class="section-title"><span class="icon">📡</span>কিভাবে খেলা দেখবেন</div></div>
+    <div class="vpn-steps" id="vpnSteps"></div>
+    <div class="ad-banner">📢 NordVPN Affiliate Banner — এখানে আপনার আয় হবে</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-disclaimer">⚠️ <strong>Disclaimer:</strong> এই website শুধুমাত্র তথ্য ও গাইড প্রদান করে। আমরা কোনো stream নিজেরা host করি না।</div>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><div class="logo-icon">⚽</div><div><div class="logo-text">WORLDCUP<span>2026</span></div><div class="logo-sub">LIVE • SCORE • SCHEDULE</div></div></div>
+        <p>বাংলাদেশ থেকে FIFA World Cup 2026 দেখার সবচেয়ে সহজ গাইড।</p>
+      </div>
+      <div class="footer-col"><h4>দ্রুত লিংক</h4><a href="#watch">🔴 লাইভ দেখুন</a><a href="#score">⚽ লাইভ স্কোর</a><a href="#schedule">📅 সিডিউল</a><a href="#standings">🏆 পয়েন্ট টেবিল</a></div>
+      <div class="footer-col"><h4>টুর্নামেন্ট</h4><a href="#">গ্রুপ স্টেজ</a><a href="#">নকআউট রাউন্ড</a><a href="#">কোয়ার্টার ফাইনাল</a><a href="#">ফাইনাল</a></div>
+      <div class="footer-col"><h4>আমাদের সাথে</h4><a href="#">📘 Facebook</a><a href="#">📺 YouTube</a><a href="#">🐦 Twitter/X</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 WorldCup2026.live</span><span>Made with ❤️ for বাংলাদেশ 🇧🇩</span></div>
+  </div>
+</footer>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <a href="#home" class="mobile-nav-item active"><span>🏠</span><span>হোম</span></a>
+    <a href="#watch" class="mobile-nav-item"><span>🔴</span><span>লাইভ</span></a>
+    <a href="#score" class="mobile-nav-item"><span>⚽</span><span>স্কোর</span></a>
+    <a href="#schedule" class="mobile-nav-item"><span>📅</span><span>সিডিউল</span></a>
+    <a href="#standings" class="mobile-nav-item"><span>🏆</span><span>টেবিল</span></a>
+  </div>
+</nav>
+
+<!-- STREAM MODAL -->
+<div class="modal-overlay" id="streamModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">📺 স্ট্রিম বেছে নিন</div><button class="modal-close" onclick="closeModal('streamModal')">✕</button></div>
+    <div class="modal-body">
+      <p style="color:var(--muted);font-size:13px;margin-bottom:18px;">নিচের যেকোনো একটিতে ক্লিক করুন। BBC/ITV দেখতে VPN লাগবে।</p>
+      <div class="stream-options" id="streamOptions"></div>
+    </div>
+  </div>
+</div>
+
+<!-- VPN MODAL -->
+<div class="modal-overlay" id="vpnModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">🔒 VPN দিয়ে খেলা দেখুন</div><button class="modal-close" onclick="closeModal('vpnModal')">✕</button></div>
+    <div class="modal-body" id="vpnModalBody"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon">⚽</div>
+  <div class="toast-text"><h4 id="toastTitle">গোল!</h4><p id="toastMsg"></p></div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

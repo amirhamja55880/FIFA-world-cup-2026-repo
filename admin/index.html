@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — WorldCup2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div class="login-logo">⚽ Admin Panel</div>
+    <p class="login-sub">WorldCup2026.live</p>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="admin" />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" />
+    </div>
+    <div id="loginError" class="error-msg" style="display:none;">❌ ভুল username বা password</div>
+    <button class="btn-login" onclick="doLogin()">লগইন করুন →</button>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="dashboard" style="display:none;">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">⚽ Admin</div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" onclick="showSection('overview')">📊 Overview</a>
+      <a href="#" class="nav-item" onclick="showSection('streams')">📺 Stream Links</a>
+      <a href="#" class="nav-item" onclick="showSection('scores')">⚽ Live Scores</a>
+      <a href="#" class="nav-item" onclick="showSection('schedule')">📅 Schedule</a>
+      <a href="#" class="nav-item" onclick="showSection('ticker')">📢 Ticker Text</a>
+      <a href="#" class="nav-item" onclick="showSection('settings')">⚙️ Settings</a>
+    </nav>
+    <button class="btn-logout" onclick="doLogout()">🚪 লগআউট</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <!-- HEADER -->
+    <div class="dash-header">
+      <h1 id="sectionTitle">📊 Overview</h1>
+      <div class="header-right">
+        <span class="live-indicator"><span class="live-dot"></span>Site Live</span>
+        <a href="../frontend/index.html" target="_blank" class="btn-view-site">👁️ Site দেখুন</a>
+      </div>
+    </div>
+
+    <!-- OVERVIEW SECTION -->
+    <div id="section-overview" class="section-content active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-info">
+            <div class="stat-num" id="totalVisitors">১২,৪৫৬</div>
+            <div class="stat-label">আজকের Visitor</div>
+          </div>
+          <div class="stat-change up">↑ ২৩%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔴</div>
+          <div class="stat-info">
+            <div class="stat-num" id="liveUsers">৩,২১</div>
+            <div class="stat-label">এখন Online</div>
+          </div>
+          <div class="stat-change up">↑ Live</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📺</div>
+          <div class="stat-info">
+            <div class="stat-num">৮,৯০২</div>
+            <div class="stat-label">Stream Click</div>
+          </div>
+          <div class="stat-change up">↑ ৪৫%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <div class="stat-num">৳ ৪,২০০</div>
+            <div class="stat-label">আজকের আয় (est.)</div>
+          </div>
+          <div class="stat-change up">↑ ১৮%</div>
+        </div>
+      </div>
+
+      <div class="info-notice">
+        ℹ️ সঠিক visitor data-র জন্য Google Analytics code আপনার site-এ যুক্ত করুন।
+        <a href="https://analytics.google.com" target="_blank">Google Analytics →</a>
+      </div>
+
+      <div class="quick-actions">
+        <h3>⚡ Quick Actions</h3>
+        <div class="action-grid">
+          <button class="action-btn" onclick="showSection('streams')">📺 Stream Link Update</button>
+          <button class="action-btn" onclick="showSection('scores')">⚽ Score Update</button>
+          <button class="action-btn" onclick="showSection('ticker')">📢 Ticker Update</button>
+          <button class="action-btn" onclick="showSection('schedule')">📅 Schedule Update</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STREAM LINKS SECTION -->
+    <div id="section-streams" class="section-content">
+      <div class="section-desc">📺 প্রতিদিন match-এর stream link এখানে update করুন।</div>
+
+      <div class="card">
+        <div class="card-title">🇬🇧 BBC iPlayer Link</div>
+        <div class="form-group">
+          <label>BBC iPlayer Direct Link</label>
+          <input type="text" id="bbcLink" value="https://www.bbc.co.uk/iplayer/live/bbcone" />
+        </div>
+        <div class="form-group">
+          <label>BBC Sport Link</label>
+          <input type="text" id="bbcSportLink" value="https://www.bbc.co.uk/sport/live" />
+        </div>
+        <button class="btn-save" onclick="saveStream('bbc')">✅ Save করুন</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🇬🇧 ITV Hub Link</div>
+        <div class="form-group">
+          <label>ITV Hub Direct Link</label>
+          <input type="text" id="itvLink" value="https://www.itv.com/watch/live" />
+        </div>
+        <button class="btn-save" onclick="saveStream('itv')">✅ Save করুন</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🏆 FIFA+ Link</div>
+        <div class="form-group">
+          <label>FIFA+ Link</label>
+          <input type="text" id="fifaLink" value="https://www.fifa.com/fifaplus" />
+        </div>
+        <button class="btn-save" onclick="saveStream('fifa')">✅ Save করুন</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🌍 অন্যান্য Stream Links</div>
+        <div class="form-group">
+          <label>SBS Australia</label>
+          <input type="text" id="sbsLink" value="https://www.sbs.com.au/ondemand/sport" />
+        </div>
+        <div class="form-group">
+          <label>TRT Spor (Turkey)</label>
+          <input type="text" id="trtLink" value="https://www.trtspor.com.tr" />
+        </div>
+        <div class="form-group">
+          <label>TVP Sport (Poland)</label>
+          <input type="text" id="tvpLink" value="https://sport.tvp.pl" />
+        </div>
+        <button class="btn-save" onclick="saveStream('others')">✅ Save করুন</button>
+      </div>
+    </div>
+
+    <!-- LIVE SCORES SECTION -->
+    <div id="section-scores" class="section-content">
+      <div class="section-desc">⚽ Live match-এর score এখানে update করুন।</div>
+
+      <div id="scoreCards"></div>
+
+      <div class="card">
+        <div class="card-title">➕ নতুন Match যোগ করুন</div>
+        <div class="form-row">
+          <div class="form-group"><label>Home Team Flag</label><input type="text" id="newHome" placeholder="🇧🇷" /></div>
+          <div class="form-group"><label>Home Team Name</label><input type="text" id="newHomeN" placeholder="ব্রাজিল" /></div>
+          <div class="form-group"><label>Score</label><input type="number" id="newHS" value="0" min="0" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Away Team Flag</label><input type="text" id="newAway" placeholder="🇩🇪" /></div>
+          <div class="form-group"><label>Away Team Name</label><input type="text" id="newAwayN" placeholder="জার্মানি" /></div>
+          <div class="form-group"><label>Score</label><input type="number" id="newAS" value="0" min="0" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Status</label>
+            <select id="newStatus">
+              <option value="upcoming">Upcoming</option>
+              <option value="live">Live</option>
+              <option value="ft">Full Time</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Time / Minute</label><input type="text" id="newTime" placeholder="রাত ১২:০০ বা 45'" /></div>
+        </div>
+        <button class="btn-save" onclick="addMatch()">➕ Match যোগ করুন</button>
+      </div>
+    </div>
+
+    <!-- SCHEDULE SECTION -->
+    <div id="section-schedule" class="section-content">
+      <div class="section-desc">📅 আজকের ও আগামীকালের match schedule update করুন।</div>
+      <div class="card">
+        <div class="card-title">⚡ আজকের Match (JSON format)</div>
+        <div class="form-group">
+          <label>Today's Matches — data.js ফাইলে এভাবে লিখুন:</label>
+          <textarea id="todaySchedule" rows="8" style="font-family:monospace;font-size:12px;">[
+  { "time":"রাত ১২:০০", "home":"🇧🇷 ব্রাজিল", "away":"🇩🇪 জার্মানি", "group":"গ্রুপ E", "stadium":"MetLife Stadium", "live":false },
+  { "time":"রাত ৩:০০",  "home":"🇪🇸 স্পেন",    "away":"🇵🇹 পর্তুগাল", "group":"গ্রুপ B", "stadium":"SoFi Stadium",    "live":false }
+]</textarea>
+        </div>
+        <button class="btn-save" onclick="saveSchedule()">✅ Save করুন</button>
+      </div>
+    </div>
+
+    <!-- TICKER SECTION -->
+    <div id="section-ticker" class="section-content">
+      <div class="section-desc">📢 Website-এর উপরে যে scrolling text দেখায় সেটা এখানে change করুন।</div>
+      <div class="card">
+        <div class="card-title">📢 Ticker Messages</div>
+        <div id="tickerItems"></div>
+        <div class="form-group" style="margin-top:16px;">
+          <label>নতুন Ticker Message যোগ করুন</label>
+          <input type="text" id="newTicker" placeholder="🔴 LIVE: ব্রাজিল vs জার্মানি চলছে..." />
+        </div>
+        <button class="btn-save" onclick="addTicker()">➕ যোগ করুন</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS SECTION -->
+    <div id="section-settings" class="section-content">
+      <div class="card">
+        <div class="card-title">⚙️ Admin Password পরিবর্তন করুন</div>
+        <div class="form-group"><label>নতুন Password</label><input type="password" id="newPass" placeholder="নতুন password" /></div>
+        <div class="form-group"><label>Confirm Password</label><input type="password" id="confirmPass" placeholder="আবার লিখুন" /></div>
+        <button class="btn-save" onclick="changePassword()">✅ Password পরিবর্তন করুন</button>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Google Analytics</div>
+        <div class="form-group"><label>GA Measurement ID (G-XXXXXXXXXX)</label><input type="text" id="gaId" placeholder="G-XXXXXXXXXX" /></div>
+        <button class="btn-save" onclick="saveGA()">✅ Save করুন</button>
+      </div>
+    </div>
+
+  </div><!-- end main-content -->
+</div><!-- end dashboard -->
+
+<!-- TOAST -->
+<div class="admin-toast" id="adminToast"></div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

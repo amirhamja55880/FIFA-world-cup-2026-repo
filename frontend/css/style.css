@@ -424,3 +424,42 @@ footer { background: var(--dark2); border-top: 1px solid var(--border); padding:
   .watch-grid { grid-template-columns: 1fr; }
   .hero-stats { gap: 16px; }
 }
+
+/* ==========================================
+   MOBILE TABLE FIX
+   ========================================== */
+@media (max-width: 600px) {
+  /* Table scroll wrapper */
+  #standingsContent { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  .standings-table { font-size: 11px; min-width: 340px; }
+  .standings-table th,
+  .standings-table td { padding: 8px 5px; }
+  .standings-table th:first-child,
+  .standings-table td:first-child { padding-left: 8px; }
+
+  /* D, L, GF, GA, ফর্ম column লুকাও */
+  .standings-table th:nth-child(5),
+  .standings-table td:nth-child(5),
+  .standings-table th:nth-child(6),
+  .standings-table td:nth-child(6),
+  .standings-table th:nth-child(7),
+  .standings-table td:nth-child(7),
+  .standings-table th:nth-child(8),
+  .standings-table td:nth-child(8),
+  .standings-table th:nth-child(11),
+  .standings-table td:nth-child(11) { display: none; }
+
+  /* Team name ছোট */
+  .team-cell { gap: 4px; }
+  .team-cell span:last-child {
+    font-size: 11px;
+    max-width: 65px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Position circle */
+  .team-pos { width: 18px; height: 18px; font-size: 10px; }
+}

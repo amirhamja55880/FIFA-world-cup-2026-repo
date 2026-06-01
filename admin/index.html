@@ -1,251 +1,673 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel — WorldCup2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/admin.css">
-</head>
-<body>
-
-<!-- LOGIN SCREEN -->
-<div id="loginScreen" class="login-screen">
-  <div class="login-box">
-    <div class="login-logo">⚽ Admin Panel</div>
-    <p class="login-sub">WorldCup2026.live</p>
-    <div class="form-group">
-      <label>Username</label>
-      <input type="text" id="loginUser" placeholder="admin" />
-    </div>
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="loginPass" placeholder="••••••••" />
-    </div>
-    <div id="loginError" class="error-msg" style="display:none;">❌ ভুল username বা password</div>
-    <button class="btn-login" onclick="doLogin()">লগইন করুন →</button>
-  </div>
-</div>
-
-<!-- ADMIN DASHBOARD -->
-<div id="dashboard" style="display:none;">
-
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="sidebar-logo">⚽ Admin</div>
-    <nav class="sidebar-nav">
-      <a href="#" class="nav-item active" onclick="showSection('overview')">📊 Overview</a>
-      <a href="#" class="nav-item" onclick="showSection('streams')">📺 Stream Links</a>
-      <a href="#" class="nav-item" onclick="showSection('scores')">⚽ Live Scores</a>
-      <a href="#" class="nav-item" onclick="showSection('schedule')">📅 Schedule</a>
-      <a href="#" class="nav-item" onclick="showSection('ticker')">📢 Ticker Text</a>
-      <a href="#" class="nav-item" onclick="showSection('settings')">⚙️ Settings</a>
-    </nav>
-    <button class="btn-logout" onclick="doLogout()">🚪 লগআউট</button>
-  </div>
-
-  <!-- MAIN CONTENT -->
-  <div class="main-content">
-
-    <!-- HEADER -->
-    <div class="dash-header">
-      <h1 id="sectionTitle">📊 Overview</h1>
-      <div class="header-right">
-        <span class="live-indicator"><span class="live-dot"></span>Site Live</span>
-        <a href="../frontend/index.html" target="_blank" class="btn-view-site">👁️ Site দেখুন</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel — WorldCup2026</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="login-screen">
+      <div class="login-box">
+        <div class="login-logo">⚽ Admin Panel</div>
+        <p class="login-sub">WorldCup2026.live</p>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="loginUser" placeholder="admin" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPass" placeholder="••••••••" />
+        </div>
+        <div id="loginError" class="error-msg" style="display: none">
+          ❌ ভুল username বা password
+        </div>
+        <button class="btn-login" onclick="doLogin()">লগইন করুন →</button>
       </div>
     </div>
 
-    <!-- OVERVIEW SECTION -->
-    <div id="section-overview" class="section-content active">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">👥</div>
-          <div class="stat-info">
-            <div class="stat-num" id="totalVisitors">১২,৪৫৬</div>
-            <div class="stat-label">আজকের Visitor</div>
+    <!-- ADMIN DASHBOARD -->
+    <div id="dashboard" style="display: none">
+      <div class="sidebar">
+        <div class="sidebar-logo">⚽ Admin</div>
+        <nav class="sidebar-nav">
+          <a
+            href="#"
+            class="nav-item active"
+            onclick="showSection('overview', this)"
+            >📊 Overview</a
+          >
+          <a href="#" class="nav-item" onclick="showSection('streams', this)"
+            >📺 Stream Links</a
+          >
+          <a href="#" class="nav-item" onclick="showSection('scores', this)"
+            >⚽ Live Scores</a
+          >
+          <a href="#" class="nav-item" onclick="showSection('schedule', this)"
+            >📅 Schedule</a
+          >
+          <a href="#" class="nav-item" onclick="showSection('ticker', this)"
+            >📢 Ticker</a
+          >
+        </nav>
+        <button class="btn-logout" onclick="doLogout()">🚪 লগআউট</button>
+      </div>
+
+      <div class="main-content">
+        <div class="dash-header">
+          <h1 id="sectionTitle">📊 Overview</h1>
+          <div class="header-right">
+            <span id="firebaseStatus" style="font-size: 12px; color: #7a8499"
+              >⏳ Connecting...</span
+            >
+            <a
+              href="../frontend/index.html"
+              target="_blank"
+              class="btn-view-site"
+              >👁️ Site দেখুন</a
+            >
           </div>
-          <div class="stat-change up">↑ ২৩%</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-icon">🔴</div>
-          <div class="stat-info">
-            <div class="stat-num" id="liveUsers">৩,২১</div>
-            <div class="stat-label">এখন Online</div>
+
+        <!-- OVERVIEW -->
+        <div id="section-overview" class="section-content active">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">📺</div>
+              <div class="stat-info">
+                <div class="stat-num">4</div>
+                <div class="stat-label">Stream Links</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">⚽</div>
+              <div class="stat-info">
+                <div class="stat-num" id="matchCount">0</div>
+                <div class="stat-label">Live Matches</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">📢</div>
+              <div class="stat-info">
+                <div class="stat-num" id="tickerCount">0</div>
+                <div class="stat-label">Ticker Messages</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">🔥</div>
+              <div class="stat-info">
+                <div class="stat-num" style="color: var(--green)">Live</div>
+                <div class="stat-label">Firebase Status</div>
+              </div>
+            </div>
           </div>
-          <div class="stat-change up">↑ Live</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">📺</div>
-          <div class="stat-info">
-            <div class="stat-num">৮,৯০২</div>
-            <div class="stat-label">Stream Click</div>
+          <div class="quick-actions">
+            <h3>⚡ Quick Actions</h3>
+            <div class="action-grid">
+              <button class="action-btn" onclick="showSection('streams', null)">
+                📺 Stream Link Update
+              </button>
+              <button class="action-btn" onclick="showSection('scores', null)">
+                ⚽ Score Update
+              </button>
+              <button class="action-btn" onclick="showSection('ticker', null)">
+                📢 Ticker Update
+              </button>
+              <button
+                class="action-btn"
+                onclick="showSection('schedule', null)"
+              >
+                📅 Schedule Update
+              </button>
+            </div>
           </div>
-          <div class="stat-change up">↑ ৪৫%</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-icon">💰</div>
-          <div class="stat-info">
-            <div class="stat-num">৳ ৪,২০০</div>
-            <div class="stat-label">আজকের আয় (est.)</div>
+
+        <!-- STREAM LINKS -->
+        <div id="section-streams" class="section-content">
+          <div class="section-desc">
+            📺 প্রতিদিন match এর stream link এখানে update করুন।
           </div>
-          <div class="stat-change up">↑ ১৮%</div>
-        </div>
-      </div>
-
-      <div class="info-notice">
-        ℹ️ সঠিক visitor data-র জন্য Google Analytics code আপনার site-এ যুক্ত করুন।
-        <a href="https://analytics.google.com" target="_blank">Google Analytics →</a>
-      </div>
-
-      <div class="quick-actions">
-        <h3>⚡ Quick Actions</h3>
-        <div class="action-grid">
-          <button class="action-btn" onclick="showSection('streams')">📺 Stream Link Update</button>
-          <button class="action-btn" onclick="showSection('scores')">⚽ Score Update</button>
-          <button class="action-btn" onclick="showSection('ticker')">📢 Ticker Update</button>
-          <button class="action-btn" onclick="showSection('schedule')">📅 Schedule Update</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- STREAM LINKS SECTION -->
-    <div id="section-streams" class="section-content">
-      <div class="section-desc">📺 প্রতিদিন match-এর stream link এখানে update করুন।</div>
-
-      <div class="card">
-        <div class="card-title">🇬🇧 BBC iPlayer Link</div>
-        <div class="form-group">
-          <label>BBC iPlayer Direct Link</label>
-          <input type="text" id="bbcLink" value="https://www.bbc.co.uk/iplayer/live/bbcone" />
-        </div>
-        <div class="form-group">
-          <label>BBC Sport Link</label>
-          <input type="text" id="bbcSportLink" value="https://www.bbc.co.uk/sport/live" />
-        </div>
-        <button class="btn-save" onclick="saveStream('bbc')">✅ Save করুন</button>
-      </div>
-
-      <div class="card">
-        <div class="card-title">🇬🇧 ITV Hub Link</div>
-        <div class="form-group">
-          <label>ITV Hub Direct Link</label>
-          <input type="text" id="itvLink" value="https://www.itv.com/watch/live" />
-        </div>
-        <button class="btn-save" onclick="saveStream('itv')">✅ Save করুন</button>
-      </div>
-
-      <div class="card">
-        <div class="card-title">🏆 FIFA+ Link</div>
-        <div class="form-group">
-          <label>FIFA+ Link</label>
-          <input type="text" id="fifaLink" value="https://www.fifa.com/fifaplus" />
-        </div>
-        <button class="btn-save" onclick="saveStream('fifa')">✅ Save করুন</button>
-      </div>
-
-      <div class="card">
-        <div class="card-title">🌍 অন্যান্য Stream Links</div>
-        <div class="form-group">
-          <label>SBS Australia</label>
-          <input type="text" id="sbsLink" value="https://www.sbs.com.au/ondemand/sport" />
-        </div>
-        <div class="form-group">
-          <label>TRT Spor (Turkey)</label>
-          <input type="text" id="trtLink" value="https://www.trtspor.com.tr" />
-        </div>
-        <div class="form-group">
-          <label>TVP Sport (Poland)</label>
-          <input type="text" id="tvpLink" value="https://sport.tvp.pl" />
-        </div>
-        <button class="btn-save" onclick="saveStream('others')">✅ Save করুন</button>
-      </div>
-    </div>
-
-    <!-- LIVE SCORES SECTION -->
-    <div id="section-scores" class="section-content">
-      <div class="section-desc">⚽ Live match-এর score এখানে update করুন।</div>
-
-      <div id="scoreCards"></div>
-
-      <div class="card">
-        <div class="card-title">➕ নতুন Match যোগ করুন</div>
-        <div class="form-row">
-          <div class="form-group"><label>Home Team Flag</label><input type="text" id="newHome" placeholder="🇧🇷" /></div>
-          <div class="form-group"><label>Home Team Name</label><input type="text" id="newHomeN" placeholder="ব্রাজিল" /></div>
-          <div class="form-group"><label>Score</label><input type="number" id="newHS" value="0" min="0" /></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Away Team Flag</label><input type="text" id="newAway" placeholder="🇩🇪" /></div>
-          <div class="form-group"><label>Away Team Name</label><input type="text" id="newAwayN" placeholder="জার্মানি" /></div>
-          <div class="form-group"><label>Score</label><input type="number" id="newAS" value="0" min="0" /></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Status</label>
-            <select id="newStatus">
-              <option value="upcoming">Upcoming</option>
-              <option value="live">Live</option>
-              <option value="ft">Full Time</option>
-            </select>
+          <div class="card">
+            <div class="card-title">🇬🇧 BBC iPlayer</div>
+            <div class="form-group">
+              <label>BBC iPlayer Link</label
+              ><input
+                type="text"
+                id="bbcLink"
+                placeholder="https://www.bbc.co.uk/iplayer/live/bbcone"
+              />
+            </div>
+            <div class="form-group">
+              <label>BBC Sport Link</label
+              ><input
+                type="text"
+                id="bbcSportLink"
+                placeholder="https://www.bbc.co.uk/sport/live"
+              />
+            </div>
+            <button class="btn-save" onclick="saveStreamLinks('bbc')">
+              ✅ Save করুন
+            </button>
           </div>
-          <div class="form-group"><label>Time / Minute</label><input type="text" id="newTime" placeholder="রাত ১২:০০ বা 45'" /></div>
+          <div class="card">
+            <div class="card-title">🇬🇧 ITV Hub</div>
+            <div class="form-group">
+              <label>ITV Hub Link</label
+              ><input
+                type="text"
+                id="itvLink"
+                placeholder="https://www.itv.com/watch/live"
+              />
+            </div>
+            <button class="btn-save" onclick="saveStreamLinks('itv')">
+              ✅ Save করুন
+            </button>
+          </div>
+          <div class="card">
+            <div class="card-title">🏆 FIFA+</div>
+            <div class="form-group">
+              <label>FIFA+ Link</label
+              ><input
+                type="text"
+                id="fifaLink"
+                placeholder="https://www.fifa.com/fifaplus"
+              />
+            </div>
+            <button class="btn-save" onclick="saveStreamLinks('fifa')">
+              ✅ Save করুন
+            </button>
+          </div>
+          <div class="card">
+            <div class="card-title">🌍 অন্যান্য</div>
+            <div class="form-group">
+              <label>SBS Australia</label
+              ><input
+                type="text"
+                id="sbsLink"
+                placeholder="https://www.sbs.com.au/ondemand/sport"
+              />
+            </div>
+            <div class="form-group">
+              <label>TRT Spor</label
+              ><input
+                type="text"
+                id="trtLink"
+                placeholder="https://www.trtspor.com.tr"
+              />
+            </div>
+            <button class="btn-save" onclick="saveStreamLinks('others')">
+              ✅ Save করুন
+            </button>
+          </div>
         </div>
-        <button class="btn-save" onclick="addMatch()">➕ Match যোগ করুন</button>
-      </div>
-    </div>
 
-    <!-- SCHEDULE SECTION -->
-    <div id="section-schedule" class="section-content">
-      <div class="section-desc">📅 আজকের ও আগামীকালের match schedule update করুন।</div>
-      <div class="card">
-        <div class="card-title">⚡ আজকের Match (JSON format)</div>
-        <div class="form-group">
-          <label>Today's Matches — data.js ফাইলে এভাবে লিখুন:</label>
-          <textarea id="todaySchedule" rows="8" style="font-family:monospace;font-size:12px;">[
-  { "time":"রাত ১২:০০", "home":"🇧🇷 ব্রাজিল", "away":"🇩🇪 জার্মানি", "group":"গ্রুপ E", "stadium":"MetLife Stadium", "live":false },
-  { "time":"রাত ৩:০০",  "home":"🇪🇸 স্পেন",    "away":"🇵🇹 পর্তুগাল", "group":"গ্রুপ B", "stadium":"SoFi Stadium",    "live":false }
-]</textarea>
+        <!-- LIVE SCORES -->
+        <div id="section-scores" class="section-content">
+          <div class="section-desc">
+            ⚽ Live match এর score এখানে update করুন।
+          </div>
+          <div id="scoreCards"></div>
+          <div class="card">
+            <div class="card-title">➕ নতুন Match যোগ করুন</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Home Flag 🏳️</label
+                ><input type="text" id="newHome" placeholder="🇧🇷" />
+              </div>
+              <div class="form-group">
+                <label>Home Team</label
+                ><input type="text" id="newHomeN" placeholder="ব্রাজিল" />
+              </div>
+              <div class="form-group">
+                <label>Home Score</label
+                ><input type="number" id="newHS" value="0" min="0" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Away Flag 🏳️</label
+                ><input type="text" id="newAway" placeholder="🇩🇪" />
+              </div>
+              <div class="form-group">
+                <label>Away Team</label
+                ><input type="text" id="newAwayN" placeholder="জার্মানি" />
+              </div>
+              <div class="form-group">
+                <label>Away Score</label
+                ><input type="number" id="newAS" value="0" min="0" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Status</label>
+                <select id="newStatus">
+                  <option value="upcoming">⏰ Upcoming</option>
+                  <option value="live">🔴 Live</option>
+                  <option value="ft">✅ Full Time</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Time/Minute</label
+                ><input
+                  type="text"
+                  id="newTime"
+                  placeholder="রাত ১২:০০ বা 45'"
+                />
+              </div>
+            </div>
+            <button class="btn-save" onclick="addMatch()">
+              ➕ Match যোগ করুন
+            </button>
+          </div>
         </div>
-        <button class="btn-save" onclick="saveSchedule()">✅ Save করুন</button>
-      </div>
-    </div>
 
-    <!-- TICKER SECTION -->
-    <div id="section-ticker" class="section-content">
-      <div class="section-desc">📢 Website-এর উপরে যে scrolling text দেখায় সেটা এখানে change করুন।</div>
-      <div class="card">
-        <div class="card-title">📢 Ticker Messages</div>
-        <div id="tickerItems"></div>
-        <div class="form-group" style="margin-top:16px;">
-          <label>নতুন Ticker Message যোগ করুন</label>
-          <input type="text" id="newTicker" placeholder="🔴 LIVE: ব্রাজিল vs জার্মানি চলছে..." />
+        <!-- SCHEDULE -->
+        <div id="section-schedule" class="section-content">
+          <div class="section-desc">📅 Match schedule update করুন।</div>
+          <div class="card">
+            <div class="card-title">⚡ আজকের Match যোগ করুন</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>সময় (BST)</label
+                ><input type="text" id="schTime" placeholder="রাত ১২:০০" />
+              </div>
+              <div class="form-group">
+                <label>Home Team</label
+                ><input type="text" id="schHome" placeholder="🇧🇷 ব্রাজিল" />
+              </div>
+              <div class="form-group">
+                <label>Away Team</label
+                ><input type="text" id="schAway" placeholder="🇩🇪 জার্মানি" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Group</label
+                ><input type="text" id="schGroup" placeholder="গ্রুপ E" />
+              </div>
+              <div class="form-group">
+                <label>Stadium</label
+                ><input
+                  type="text"
+                  id="schStadium"
+                  placeholder="MetLife Stadium"
+                />
+              </div>
+            </div>
+            <button class="btn-save" onclick="addScheduleMatch()">
+              ➕ Match যোগ করুন
+            </button>
+          </div>
+          <div id="scheduleList"></div>
         </div>
-        <button class="btn-save" onclick="addTicker()">➕ যোগ করুন</button>
+
+        <!-- TICKER -->
+        <div id="section-ticker" class="section-content">
+          <div class="section-desc">📢 Website এর উপরের scrolling text।</div>
+          <div class="card">
+            <div class="card-title">📢 Ticker Messages</div>
+            <div id="tickerList"></div>
+            <div class="form-group" style="margin-top: 16px">
+              <label>নতুন Message যোগ করুন</label>
+              <input
+                type="text"
+                id="newTickerMsg"
+                placeholder="🔴 LIVE: ব্রাজিল vs জার্মানি চলছে..."
+              />
+            </div>
+            <button class="btn-save" onclick="addTickerMsg()">
+              ➕ যোগ করুন
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- SETTINGS SECTION -->
-    <div id="section-settings" class="section-content">
-      <div class="card">
-        <div class="card-title">⚙️ Admin Password পরিবর্তন করুন</div>
-        <div class="form-group"><label>নতুন Password</label><input type="password" id="newPass" placeholder="নতুন password" /></div>
-        <div class="form-group"><label>Confirm Password</label><input type="password" id="confirmPass" placeholder="আবার লিখুন" /></div>
-        <button class="btn-save" onclick="changePassword()">✅ Password পরিবর্তন করুন</button>
-      </div>
-      <div class="card">
-        <div class="card-title">📊 Google Analytics</div>
-        <div class="form-group"><label>GA Measurement ID (G-XXXXXXXXXX)</label><input type="text" id="gaId" placeholder="G-XXXXXXXXXX" /></div>
-        <button class="btn-save" onclick="saveGA()">✅ Save করুন</button>
+    <div class="admin-toast" id="adminToast"></div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        set,
+        push,
+        onValue,
+        remove,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+      // Firebase Config
+      const firebaseConfig = {
+        apiKey: "AIzaSyA3SINyVd3nA926E9PcK9VV4oJef5Gzl_8",
+        authDomain: "worldcup2026-719a1.firebaseapp.com",
+        databaseURL: "https://worldcup2026-719a1-default-rtdb.firebaseio.com",
+        projectId: "worldcup2026-719a1",
+        storageBucket: "worldcup2026-719a1.firebasestorage.app",
+        messagingSenderId: "950987598646",
+        appId: "1:950987598646:web:0cb29ce0ee347a24bd2197",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
+      // Firebase connected
+      document.getElementById("firebaseStatus").textContent =
+        "🔥 Firebase Connected";
+      document.getElementById("firebaseStatus").style.color = "#00d46a";
+
+      // ============================================================
+      // LOGIN
+      // ============================================================
+      const ADMIN_USER = "admin";
+      const ADMIN_PASS = "worldcup2026";
+
+      window.doLogin = function () {
+        const user = document.getElementById("loginUser").value.trim();
+        const pass = document.getElementById("loginPass").value.trim();
+        if (user === ADMIN_USER && pass === ADMIN_PASS) {
+          document.getElementById("loginScreen").style.display = "none";
+          document.getElementById("dashboard").style.display = "flex";
+          loadAllData();
+          showToast("✅ লগইন সফল!", "success");
+        } else {
+          document.getElementById("loginError").style.display = "block";
+        }
+      };
+
+      window.doLogout = function () {
+        document.getElementById("dashboard").style.display = "none";
+        document.getElementById("loginScreen").style.display = "flex";
+      };
+
+      document.getElementById("loginPass").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") window.doLogin();
+      });
+
+      // ============================================================
+      // SECTION NAVIGATION
+      // ============================================================
+      window.showSection = function (name, btn) {
+        document
+          .querySelectorAll(".section-content")
+          .forEach((s) => s.classList.remove("active"));
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((n) => n.classList.remove("active"));
+        document.getElementById("section-" + name).classList.add("active");
+        const titles = {
+          overview: "📊 Overview",
+          streams: "📺 Stream Links",
+          scores: "⚽ Live Scores",
+          schedule: "📅 Schedule",
+          ticker: "📢 Ticker",
+        };
+        document.getElementById("sectionTitle").textContent = titles[name];
+        if (btn) btn.classList.add("active");
+      };
+
+      // ============================================================
+      // STREAM LINKS
+      // ============================================================
+      window.saveStreamLinks = async function (type) {
+        let data = {};
+        if (type === "bbc") {
+          data = {
+            bbc: document.getElementById("bbcLink").value,
+            bbcSport: document.getElementById("bbcSportLink").value,
+          };
+        } else if (type === "itv") {
+          data = { itv: document.getElementById("itvLink").value };
+        } else if (type === "fifa") {
+          data = { fifa: document.getElementById("fifaLink").value };
+        } else if (type === "others") {
+          data = {
+            sbs: document.getElementById("sbsLink").value,
+            trt: document.getElementById("trtLink").value,
+          };
+        }
+        try {
+          await set(ref(db, "streamLinks/" + type), data);
+          showToast("✅ Stream link save হয়েছে!", "success");
+        } catch (e) {
+          showToast("❌ Error: " + e.message, "error");
+        }
+      };
+
+      // ============================================================
+      // LIVE SCORES
+      // ============================================================
+      let matches = [];
+
+      function renderScoreCards() {
+        document.getElementById("matchCount").textContent = matches.length;
+        document.getElementById("scoreCards").innerHTML = matches
+          .map(
+            (m, i) => `
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr auto;align-items:center;gap:12px;">
+        <div>
+          <div style="font-size:22px;">${m.home}</div>
+          <div style="font-weight:600;font-size:14px;">${m.homeN}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="number" value="${m.hs}" min="0" onchange="updateMatch(${i},'hs',this.value)"
+            style="width:50px;background:var(--dark2);border:1px solid var(--border);border-radius:6px;color:white;text-align:center;padding:6px;font-size:18px;" />
+          <span style="color:var(--muted);">—</span>
+          <input type="number" value="${m.as}" min="0" onchange="updateMatch(${i},'as',this.value)"
+            style="width:50px;background:var(--dark2);border:1px solid var(--border);border-radius:6px;color:white;text-align:center;padding:6px;font-size:18px;" />
+        </div>
+        <div>
+          <div style="font-size:22px;">${m.away}</div>
+          <div style="font-weight:600;font-size:14px;">${m.awayN}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <select onchange="updateMatch(${i},'status',this.value)"
+            style="background:var(--dark2);border:1px solid var(--border);border-radius:6px;color:white;padding:6px;font-family:'Hind Siliguri',sans-serif;">
+            <option value="upcoming" ${m.status === "upcoming" ? "selected" : ""}>⏰ Upcoming</option>
+            <option value="live" ${m.status === "live" ? "selected" : ""}>🔴 Live</option>
+            <option value="ft" ${m.status === "ft" ? "selected" : ""}>✅ FT</option>
+          </select>
+          <input type="text" value="${m.time}" onchange="updateMatch(${i},'time',this.value)"
+            style="background:var(--dark2);border:1px solid var(--border);border-radius:6px;color:white;padding:6px;font-family:'Hind Siliguri',sans-serif;" />
+          <button onclick="deleteMatch(${i})" style="padding:6px;background:rgba(232,25,44,.1);border:1px solid rgba(232,25,44,.3);border-radius:6px;color:var(--red);cursor:pointer;">🗑️ Delete</button>
+        </div>
       </div>
     </div>
+  `,
+          )
+          .join("");
+      }
 
-  </div><!-- end main-content -->
-</div><!-- end dashboard -->
+      window.updateMatch = function (i, field, value) {
+        matches[i][field] =
+          field === "hs" || field === "as" ? parseInt(value) : value;
+        saveMatchesToFirebase();
+      };
 
-<!-- TOAST -->
-<div class="admin-toast" id="adminToast"></div>
+      window.addMatch = async function () {
+        const newMatch = {
+          home: document.getElementById("newHome").value || "🏳️",
+          homeN: document.getElementById("newHomeN").value || "Home Team",
+          away: document.getElementById("newAway").value || "🏳️",
+          awayN: document.getElementById("newAwayN").value || "Away Team",
+          hs: parseInt(document.getElementById("newHS").value) || 0,
+          as: parseInt(document.getElementById("newAS").value) || 0,
+          status: document.getElementById("newStatus").value,
+          time: document.getElementById("newTime").value || "TBD",
+        };
+        matches.push(newMatch);
+        await saveMatchesToFirebase();
+        renderScoreCards();
+        // Clear inputs
+        ["newHome", "newHomeN", "newAway", "newAwayN", "newTime"].forEach(
+          (id) => (document.getElementById(id).value = ""),
+        );
+        document.getElementById("newHS").value = 0;
+        document.getElementById("newAS").value = 0;
+      };
 
-<script src="js/admin.js"></script>
-</body>
+      window.deleteMatch = async function (i) {
+        matches.splice(i, 1);
+        await saveMatchesToFirebase();
+        renderScoreCards();
+        showToast("🗑️ Match delete হয়েছে।", "success");
+      };
+
+      async function saveMatchesToFirebase() {
+        try {
+          await set(ref(db, "matches"), matches);
+          showToast("✅ Score save হয়েছে!", "success");
+        } catch (e) {
+          showToast("❌ Error!", "error");
+        }
+      }
+
+      // ============================================================
+      // SCHEDULE
+      // ============================================================
+      let scheduleToday = [];
+
+      function renderScheduleList() {
+        document.getElementById("scheduleList").innerHTML = scheduleToday.length
+          ? scheduleToday
+              .map(
+                (m, i) => `
+    <div class="card" style="margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div>
+        <div style="font-weight:600;">${m.home} vs ${m.away}</div>
+        <div style="font-size:12px;color:var(--muted);">${m.time} — ${m.group} — ${m.stadium}</div>
+      </div>
+      <button onclick="deleteSchedule(${i})" style="padding:6px 10px;background:rgba(232,25,44,.1);border:1px solid rgba(232,25,44,.3);border-radius:6px;color:var(--red);cursor:pointer;">🗑️</button>
+    </div>
+  `,
+              )
+              .join("")
+          : '<div class="section-desc">কোনো match নেই। উপরে যোগ করুন।</div>';
+      }
+
+      window.addScheduleMatch = async function () {
+        const match = {
+          time: document.getElementById("schTime").value,
+          home: document.getElementById("schHome").value,
+          away: document.getElementById("schAway").value,
+          group: document.getElementById("schGroup").value,
+          stadium: document.getElementById("schStadium").value,
+          live: false,
+        };
+        if (!match.home || !match.away) {
+          showToast("❌ Team name দিন!", "error");
+          return;
+        }
+        scheduleToday.push(match);
+        await set(ref(db, "schedule/today"), scheduleToday);
+        renderScheduleList();
+        showToast("✅ Match যোগ হয়েছে!", "success");
+        ["schTime", "schHome", "schAway", "schGroup", "schStadium"].forEach(
+          (id) => (document.getElementById(id).value = ""),
+        );
+      };
+
+      window.deleteSchedule = async function (i) {
+        scheduleToday.splice(i, 1);
+        await set(ref(db, "schedule/today"), scheduleToday);
+        renderScheduleList();
+        showToast("🗑️ Match delete হয়েছে।", "success");
+      };
+
+      // ============================================================
+      // TICKER
+      // ============================================================
+      let tickerMsgs = [];
+
+      function renderTickerList() {
+        document.getElementById("tickerCount").textContent = tickerMsgs.length;
+        document.getElementById("tickerList").innerHTML = tickerMsgs
+          .map(
+            (msg, i) => `
+    <div class="ticker-item">
+      <span>${msg}</span>
+      <button class="ticker-delete" onclick="deleteTicker(${i})">✕</button>
+    </div>
+  `,
+          )
+          .join("");
+      }
+
+      window.addTickerMsg = async function () {
+        const val = document.getElementById("newTickerMsg").value.trim();
+        if (!val) {
+          showToast("❌ কিছু লিখুন!", "error");
+          return;
+        }
+        tickerMsgs.push(val);
+        await set(ref(db, "ticker"), tickerMsgs);
+        document.getElementById("newTickerMsg").value = "";
+        showToast("✅ Ticker যোগ হয়েছে!", "success");
+      };
+
+      window.deleteTicker = async function (i) {
+        tickerMsgs.splice(i, 1);
+        await set(ref(db, "ticker"), tickerMsgs);
+        showToast("🗑️ Delete হয়েছে।", "success");
+      };
+
+      // ============================================================
+      // LOAD ALL DATA FROM FIREBASE
+      // ============================================================
+      function loadAllData() {
+        // Matches
+        onValue(ref(db, "matches"), (snapshot) => {
+          matches = snapshot.val() || [];
+          renderScoreCards();
+        });
+
+        // Schedule
+        onValue(ref(db, "schedule/today"), (snapshot) => {
+          scheduleToday = snapshot.val() || [];
+          renderScheduleList();
+        });
+
+        // Ticker
+        onValue(ref(db, "ticker"), (snapshot) => {
+          tickerMsgs = snapshot.val() || [];
+          renderTickerList();
+        });
+
+        // Stream links
+        onValue(ref(db, "streamLinks"), (snapshot) => {
+          const data = snapshot.val();
+          if (!data) return;
+          if (data.bbc) {
+            document.getElementById("bbcLink").value = data.bbc.bbc || "";
+            document.getElementById("bbcSportLink").value =
+              data.bbc.bbcSport || "";
+          }
+          if (data.itv)
+            document.getElementById("itvLink").value = data.itv.itv || "";
+          if (data.fifa)
+            document.getElementById("fifaLink").value = data.fifa.fifa || "";
+          if (data.others) {
+            document.getElementById("sbsLink").value = data.others.sbs || "";
+            document.getElementById("trtLink").value = data.others.trt || "";
+          }
+        });
+      }
+
+      // ============================================================
+      // TOAST
+      // ============================================================
+      window.showToast = function (msg, type) {
+        const t = document.getElementById("adminToast");
+        t.textContent = msg;
+        t.className = `admin-toast show ${type}`;
+        setTimeout(() => t.classList.remove("show"), 3000);
+      };
+    </script>
+  </body>
 </html>

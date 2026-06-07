@@ -54,6 +54,9 @@
           <a href="#" class="nav-item" onclick="showSection('ticker', this)"
             >📢 Ticker</a
           >
+          <a href="#" class="nav-item" onclick="showSection('liveplayer', this)"
+            >🎬 Live Player</a
+          >
         </nav>
         <button class="btn-logout" onclick="doLogout()">🚪 লগআউট</button>
       </div>
@@ -329,6 +332,69 @@
       </div>
     </div>
 
+    <!-- LIVE PLAYER SECTION -->
+    <div id="section-liveplayer" class="section-content">
+      <div class="section-desc">
+        🎬 Match এর সময় এখানে Live Stream link দিন।
+      </div>
+      <div class="card">
+        <div class="card-title">🎬 Live Match Player</div>
+        <div class="form-group">
+          <label>Match Title</label>
+          <input
+            type="text"
+            id="liveMatchTitle"
+            placeholder="🇧🇷 ব্রাজিল vs 🇩🇪 জার্মানি — Group E"
+          />
+        </div>
+        <div class="form-group">
+          <label>YouTube Video ID</label>
+          <input
+            type="text"
+            id="liveStreamUrl"
+            placeholder="youtube.com/watch?v= এর পরের অংশ"
+          />
+          <small
+            style="
+              color: var(--muted);
+              font-size: 12px;
+              margin-top: 6px;
+              display: block;
+            "
+          >
+            যেমন: youtube.com/watch?v=<b>dQw4w9WgXcQ</b> হলে শুধু
+            <b>dQw4w9WgXcQ</b> দিন
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="liveStatus">
+            <option value="offline">⭕ Offline — Match নেই</option>
+            <option value="live">🔴 Live — Match চলছে</option>
+            <option value="soon">⏰ Coming Soon</option>
+          </select>
+        </div>
+        <button class="btn-save" onclick="saveLivePlayer()">
+          ✅ Save করুন
+        </button>
+      </div>
+      <div class="card" style="margin-top: 16px">
+        <div class="card-title">👁️ Preview</div>
+        <div
+          id="playerPreview"
+          style="
+            background: var(--dark);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: var(--muted);
+          "
+        >
+          Save করলে এখানে preview দেখাবে
+        </div>
+      </div>
+    </div>
+
     <div class="admin-toast" id="adminToast"></div>
 
     <script type="module">
@@ -406,6 +472,7 @@
           scores: "⚽ Live Scores",
           schedule: "📅 Schedule",
           ticker: "📢 Ticker",
+          liveplayer: "🎬 Live Player",
         };
         document.getElementById("sectionTitle").textContent = titles[name];
         if (btn) btn.classList.add("active");
@@ -662,6 +729,61 @@
       // ============================================================
       // TOAST
       // ============================================================
+
+      // ============================================================
+      // LIVE PLAYER
+      // ============================================================
+      window.saveLivePlayer = async function () {
+        const data = {
+          title: document.getElementById("liveMatchTitle").value,
+          videoId: document.getElementById("liveStreamUrl").value.trim(),
+          status: document.getElementById("liveStatus").value,
+        };
+
+        // YouTube URL থেকে video ID বের করো
+        if (data.videoId.includes("youtube.com")) {
+          const parts = data.videoId.split("v=");
+          if (parts[1]) data.videoId = parts[1].split("&")[0];
+        } else if (data.videoId.includes("youtu.be")) {
+          data.videoId = data.videoId.split("/").pop();
+        }
+
+        try {
+          await set(ref(db, "livePlayer"), data);
+          showToast("✅ Live Player save হয়েছে!", "success");
+
+          // Preview দেখাও
+          const preview = document.getElementById("playerPreview");
+          if (data.status === "live" && data.videoId) {
+            preview.innerHTML = `
+        <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:8px;overflow:hidden;">
+          <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+            src="https://www.youtube.com/embed/${data.videoId}?autoplay=0"
+            allowfullscreen></iframe>
+        </div>
+        <p style="margin-top:10px;color:var(--green);font-size:13px;">✅ এই player Website এ দেখাবে!</p>
+      `;
+          } else {
+            preview.innerHTML = `<p style="color:var(--muted);">Status: ${data.status} — Match না থাকলে player দেখাবে না।</p>`;
+          }
+        } catch (e) {
+          showToast("❌ Error: " + e.message, "error");
+        }
+      };
+
+      // Live Player data load
+      onValue(ref(db, "livePlayer"), (snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
+        if (document.getElementById("liveMatchTitle"))
+          document.getElementById("liveMatchTitle").value = data.title || "";
+        if (document.getElementById("liveStreamUrl"))
+          document.getElementById("liveStreamUrl").value = data.videoId || "";
+        if (document.getElementById("liveStatus"))
+          document.getElementById("liveStatus").value =
+            data.status || "offline";
+      });
+
       window.showToast = function (msg, type) {
         const t = document.getElementById("adminToast");
         t.textContent = msg;

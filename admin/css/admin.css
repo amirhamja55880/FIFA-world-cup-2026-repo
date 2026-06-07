@@ -220,3 +220,28 @@ body { font-family:'Hind Siliguri',sans-serif; background:var(--dark); color:var
   .form-row { grid-template-columns:1fr; }
   .stats-grid { grid-template-columns:1fr 1fr; }
 }
+/* Sidebar fix */
+#dashboard {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  min-width: 220px;
+  width: 220px;
+  flex-shrink: 0;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 0;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+/* Card input fix */
+.card input,
+.card select,
+.card textarea {
+  width: 100%;
+}

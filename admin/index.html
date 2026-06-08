@@ -33,6 +33,7 @@
 
     <!-- ADMIN DASHBOARD -->
     <div id="dashboard" style="display: none">
+      <!-- SIDEBAR -->
       <div class="sidebar">
         <div class="sidebar-logo">⚽ Admin</div>
         <nav class="sidebar-nav">
@@ -61,6 +62,7 @@
         <button class="btn-logout" onclick="doLogout()">🚪 লগআউট</button>
       </div>
 
+      <!-- MAIN CONTENT -->
       <div class="main-content">
         <div class="dash-header">
           <h1 id="sectionTitle">📊 Overview</h1>
@@ -126,6 +128,12 @@
                 onclick="showSection('schedule', null)"
               >
                 📅 Schedule Update
+              </button>
+              <button
+                class="action-btn"
+                onclick="showSection('liveplayer', null)"
+              >
+                🎬 Live Player
               </button>
             </div>
           </div>
@@ -329,71 +337,69 @@
             </button>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- LIVE PLAYER SECTION -->
-    <div id="section-liveplayer" class="section-content">
-      <div class="section-desc">
-        🎬 Match এর সময় এখানে Live Stream link দিন।
-      </div>
-      <div class="card">
-        <div class="card-title">🎬 Live Match Player</div>
-        <div class="form-group">
-          <label>Match Title</label>
-          <input
-            type="text"
-            id="liveMatchTitle"
-            placeholder="🇧🇷 ব্রাজিল vs 🇩🇪 জার্মানি — Group E"
-          />
-        </div>
-        <div class="form-group">
-          <label>YouTube Video ID</label>
-          <input
-            type="text"
-            id="liveStreamUrl"
-            placeholder="youtube.com/watch?v= এর পরের অংশ"
-          />
-          <small
-            style="
-              color: var(--muted);
-              font-size: 12px;
-              margin-top: 6px;
-              display: block;
-            "
-          >
-            যেমন: youtube.com/watch?v=<b>dQw4w9WgXcQ</b> হলে শুধু
-            <b>dQw4w9WgXcQ</b> দিন
-          </small>
-        </div>
-        <div class="form-group">
-          <label>Status</label>
-          <select id="liveStatus">
-            <option value="offline">⭕ Offline — Match নেই</option>
-            <option value="live">🔴 Live — Match চলছে</option>
-            <option value="soon">⏰ Coming Soon</option>
-          </select>
-        </div>
-        <button class="btn-save" onclick="saveLivePlayer()">
-          ✅ Save করুন
-        </button>
-      </div>
-      <div class="card" style="margin-top: 16px">
-        <div class="card-title">👁️ Preview</div>
-        <div
-          id="playerPreview"
-          style="
-            background: var(--dark);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            color: var(--muted);
-          "
-        >
-          Save করলে এখানে preview দেখাবে
+        <!-- LIVE PLAYER ← এখন সঠিক জায়গায় আছে -->
+        <div id="section-liveplayer" class="section-content">
+          <div class="section-desc">
+            🎬 Match এর সময় এখানে Live Stream link দিন।
+          </div>
+          <div class="card">
+            <div class="card-title">🎬 Live Match Player</div>
+            <div class="form-group">
+              <label>Match Title</label>
+              <input
+                type="text"
+                id="liveMatchTitle"
+                placeholder="🇧🇷 ব্রাজিল vs 🇩🇪 জার্মানি — Group E"
+              />
+            </div>
+            <div class="form-group">
+              <label>YouTube Video ID</label>
+              <input type="text" id="liveStreamUrl" placeholder="dQw4w9WgXcQ" />
+              <small
+                style="
+                  color: var(--muted);
+                  font-size: 12px;
+                  margin-top: 6px;
+                  display: block;
+                "
+              >
+                youtube.com/watch?v=<b>dQw4w9WgXcQ</b> হলে শুধু
+                <b>dQw4w9WgXcQ</b> দিন
+              </small>
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select id="liveStatus">
+                <option value="offline">⭕ Offline — Match নেই</option>
+                <option value="live">🔴 Live — Match চলছে</option>
+                <option value="soon">⏰ Coming Soon</option>
+              </select>
+            </div>
+            <button class="btn-save" onclick="saveLivePlayer()">
+              ✅ Save করুন
+            </button>
+          </div>
+          <div class="card" style="margin-top: 16px">
+            <div class="card-title">👁️ Preview</div>
+            <div
+              id="playerPreview"
+              style="
+                background: var(--dark);
+                border-radius: 10px;
+                padding: 20px;
+                text-align: center;
+                color: var(--muted);
+              "
+            >
+              Save করলে এখানে preview দেখাবে
+            </div>
+          </div>
         </div>
       </div>
+      <!-- end main-content -->
     </div>
+    <!-- end dashboard -->
 
     <div class="admin-toast" id="adminToast"></div>
 
@@ -403,12 +409,9 @@
         getDatabase,
         ref,
         set,
-        push,
         onValue,
-        remove,
       } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-      // Firebase Config
       const firebaseConfig = {
         apiKey: "AIzaSyA3SINyVd3nA926E9PcK9VV4oJef5Gzl_8",
         authDomain: "worldcup2026-719a1.firebaseapp.com",
@@ -422,14 +425,11 @@
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app);
 
-      // Firebase connected
       document.getElementById("firebaseStatus").textContent =
         "🔥 Firebase Connected";
       document.getElementById("firebaseStatus").style.color = "#00d46a";
 
-      // ============================================================
       // LOGIN
-      // ============================================================
       const ADMIN_USER = "admin";
       const ADMIN_PASS = "worldcup2026";
 
@@ -455,9 +455,7 @@
         if (e.key === "Enter") window.doLogin();
       });
 
-      // ============================================================
       // SECTION NAVIGATION
-      // ============================================================
       window.showSection = function (name, btn) {
         document
           .querySelectorAll(".section-content")
@@ -478,9 +476,7 @@
         if (btn) btn.classList.add("active");
       };
 
-      // ============================================================
       // STREAM LINKS
-      // ============================================================
       window.saveStreamLinks = async function (type) {
         let data = {};
         if (type === "bbc") {
@@ -506,9 +502,7 @@
         }
       };
 
-      // ============================================================
       // LIVE SCORES
-      // ============================================================
       let matches = [];
 
       function renderScoreCards() {
@@ -517,11 +511,8 @@
           .map(
             (m, i) => `
     <div class="card" style="margin-bottom:12px;">
-      <div style="display:grid;grid-template-columns:1fr auto 1fr auto;align-items:center;gap:12px;">
-        <div>
-          <div style="font-size:22px;">${m.home}</div>
-          <div style="font-weight:600;font-size:14px;">${m.homeN}</div>
-        </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr auto;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div><div style="font-size:22px;">${m.home}</div><div style="font-weight:600;font-size:14px;">${m.homeN}</div></div>
         <div style="display:flex;align-items:center;gap:8px;">
           <input type="number" value="${m.hs}" min="0" onchange="updateMatch(${i},'hs',this.value)"
             style="width:50px;background:var(--dark2);border:1px solid var(--border);border-radius:6px;color:white;text-align:center;padding:6px;font-size:18px;" />
@@ -529,10 +520,7 @@
           <input type="number" value="${m.as}" min="0" onchange="updateMatch(${i},'as',this.value)"
             style="width:50px;background:var(--dark2);border:1px solid var(--border);border-radius:6px;color:white;text-align:center;padding:6px;font-size:18px;" />
         </div>
-        <div>
-          <div style="font-size:22px;">${m.away}</div>
-          <div style="font-weight:600;font-size:14px;">${m.awayN}</div>
-        </div>
+        <div><div style="font-size:22px;">${m.away}</div><div style="font-weight:600;font-size:14px;">${m.awayN}</div></div>
         <div style="display:flex;flex-direction:column;gap:8px;">
           <select onchange="updateMatch(${i},'status',this.value)"
             style="background:var(--dark2);border:1px solid var(--border);border-radius:6px;color:white;padding:6px;font-family:'Hind Siliguri',sans-serif;">
@@ -571,7 +559,6 @@
         matches.push(newMatch);
         await saveMatchesToFirebase();
         renderScoreCards();
-        // Clear inputs
         ["newHome", "newHomeN", "newAway", "newAwayN", "newTime"].forEach(
           (id) => (document.getElementById(id).value = ""),
         );
@@ -595,9 +582,7 @@
         }
       }
 
-      // ============================================================
       // SCHEDULE
-      // ============================================================
       let scheduleToday = [];
 
       function renderScheduleList() {
@@ -605,14 +590,14 @@
           ? scheduleToday
               .map(
                 (m, i) => `
-    <div class="card" style="margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
-      <div>
-        <div style="font-weight:600;">${m.home} vs ${m.away}</div>
-        <div style="font-size:12px;color:var(--muted);">${m.time} — ${m.group} — ${m.stadium}</div>
+      <div class="card" style="margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div>
+          <div style="font-weight:600;">${m.home} vs ${m.away}</div>
+          <div style="font-size:12px;color:var(--muted);">${m.time} — ${m.group} — ${m.stadium}</div>
+        </div>
+        <button onclick="deleteSchedule(${i})" style="padding:6px 10px;background:rgba(232,25,44,.1);border:1px solid rgba(232,25,44,.3);border-radius:6px;color:var(--red);cursor:pointer;flex-shrink:0;">🗑️</button>
       </div>
-      <button onclick="deleteSchedule(${i})" style="padding:6px 10px;background:rgba(232,25,44,.1);border:1px solid rgba(232,25,44,.3);border-radius:6px;color:var(--red);cursor:pointer;">🗑️</button>
-    </div>
-  `,
+    `,
               )
               .join("")
           : '<div class="section-desc">কোনো match নেই। উপরে যোগ করুন।</div>';
@@ -647,9 +632,7 @@
         showToast("🗑️ Match delete হয়েছে।", "success");
       };
 
-      // ============================================================
       // TICKER
-      // ============================================================
       let tickerMsgs = [];
 
       function renderTickerList() {
@@ -684,29 +667,52 @@
         showToast("🗑️ Delete হয়েছে।", "success");
       };
 
-      // ============================================================
-      // LOAD ALL DATA FROM FIREBASE
-      // ============================================================
+      // LIVE PLAYER
+      window.saveLivePlayer = async function () {
+        const data = {
+          title: document.getElementById("liveMatchTitle").value,
+          videoId: document.getElementById("liveStreamUrl").value.trim(),
+          status: document.getElementById("liveStatus").value,
+        };
+        if (data.videoId.includes("youtube.com")) {
+          const parts = data.videoId.split("v=");
+          if (parts[1]) data.videoId = parts[1].split("&")[0];
+        } else if (data.videoId.includes("youtu.be")) {
+          data.videoId = data.videoId.split("/").pop();
+        }
+        try {
+          await set(ref(db, "livePlayer"), data);
+          showToast("✅ Live Player save হয়েছে!", "success");
+          const preview = document.getElementById("playerPreview");
+          if (data.status === "live" && data.videoId) {
+            preview.innerHTML = `
+        <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:8px;overflow:hidden;">
+          <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+            src="https://www.youtube.com/embed/${data.videoId}?autoplay=0" allowfullscreen></iframe>
+        </div>
+        <p style="margin-top:10px;color:var(--green);font-size:13px;">✅ এই player Website এ দেখাবে!</p>`;
+          } else {
+            preview.innerHTML = `<p style="color:var(--muted);">Status: ${data.status} — Match না থাকলে player দেখাবে না।</p>`;
+          }
+        } catch (e) {
+          showToast("❌ Error: " + e.message, "error");
+        }
+      };
+
+      // LOAD ALL DATA
       function loadAllData() {
-        // Matches
         onValue(ref(db, "matches"), (snapshot) => {
           matches = snapshot.val() || [];
           renderScoreCards();
         });
-
-        // Schedule
         onValue(ref(db, "schedule/today"), (snapshot) => {
           scheduleToday = snapshot.val() || [];
           renderScheduleList();
         });
-
-        // Ticker
         onValue(ref(db, "ticker"), (snapshot) => {
           tickerMsgs = snapshot.val() || [];
           renderTickerList();
         });
-
-        // Stream links
         onValue(ref(db, "streamLinks"), (snapshot) => {
           const data = snapshot.val();
           if (!data) return;
@@ -724,66 +730,17 @@
             document.getElementById("trtLink").value = data.others.trt || "";
           }
         });
-      }
-
-      // ============================================================
-      // TOAST
-      // ============================================================
-
-      // ============================================================
-      // LIVE PLAYER
-      // ============================================================
-      window.saveLivePlayer = async function () {
-        const data = {
-          title: document.getElementById("liveMatchTitle").value,
-          videoId: document.getElementById("liveStreamUrl").value.trim(),
-          status: document.getElementById("liveStatus").value,
-        };
-
-        // YouTube URL থেকে video ID বের করো
-        if (data.videoId.includes("youtube.com")) {
-          const parts = data.videoId.split("v=");
-          if (parts[1]) data.videoId = parts[1].split("&")[0];
-        } else if (data.videoId.includes("youtu.be")) {
-          data.videoId = data.videoId.split("/").pop();
-        }
-
-        try {
-          await set(ref(db, "livePlayer"), data);
-          showToast("✅ Live Player save হয়েছে!", "success");
-
-          // Preview দেখাও
-          const preview = document.getElementById("playerPreview");
-          if (data.status === "live" && data.videoId) {
-            preview.innerHTML = `
-        <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:8px;overflow:hidden;">
-          <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
-            src="https://www.youtube.com/embed/${data.videoId}?autoplay=0"
-            allowfullscreen></iframe>
-        </div>
-        <p style="margin-top:10px;color:var(--green);font-size:13px;">✅ এই player Website এ দেখাবে!</p>
-      `;
-          } else {
-            preview.innerHTML = `<p style="color:var(--muted);">Status: ${data.status} — Match না থাকলে player দেখাবে না।</p>`;
-          }
-        } catch (e) {
-          showToast("❌ Error: " + e.message, "error");
-        }
-      };
-
-      // Live Player data load
-      onValue(ref(db, "livePlayer"), (snapshot) => {
-        const data = snapshot.val();
-        if (!data) return;
-        if (document.getElementById("liveMatchTitle"))
+        onValue(ref(db, "livePlayer"), (snapshot) => {
+          const data = snapshot.val();
+          if (!data) return;
           document.getElementById("liveMatchTitle").value = data.title || "";
-        if (document.getElementById("liveStreamUrl"))
           document.getElementById("liveStreamUrl").value = data.videoId || "";
-        if (document.getElementById("liveStatus"))
           document.getElementById("liveStatus").value =
             data.status || "offline";
-      });
+        });
+      }
 
+      // TOAST
       window.showToast = function (msg, type) {
         const t = document.getElementById("adminToast");
         t.textContent = msg;

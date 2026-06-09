@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://worldcup2026-g8he.onrender.com/sitemap.xml

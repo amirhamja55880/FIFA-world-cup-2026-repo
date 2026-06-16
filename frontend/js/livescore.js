@@ -12,16 +12,22 @@ const WC_ID = "WC"; // FIFA World Cup competition ID
 // -----------------------------------------------
 async function fetchAPI(endpoint) {
   try {
+    console.log("🔄 Fetching:", endpoint);
     const response = await fetch(
       `https://api.football-data.org/v4/${endpoint}`,
       {
         headers: { "X-Auth-Token": API_TOKEN },
       },
     );
-    if (!response.ok) throw new Error("API error");
-    return await response.json();
+    if (!response.ok) {
+      console.error("❌ API status:", response.status);
+      throw new Error("API error: " + response.status);
+    }
+    const json = await response.json();
+    console.log("✅ API data:", json);
+    return json;
   } catch (error) {
-    console.error("API Error:", error);
+    console.error("❌ API Error:", error);
     return null;
   }
 }
@@ -30,29 +36,24 @@ async function fetchAPI(endpoint) {
 // LIVE + TODAY'S MATCHES
 // -----------------------------------------------
 async function fetchLiveMatches() {
-  const data = await fetchAPI(`competitions/${WC_ID}/matches?status=LIVE`);
-  const todayData = await fetchAPI(
-    `competitions/${WC_ID}/matches?status=IN_PLAY,PAUSED,FINISHED&dateFrom=${getToday()}&dateTo=${getToday()}`,
+  // আজ এবং গতকালের সব ম্যাচ (LIVE, FINISHED, SCHEDULED সব status)
+  const data = await fetchAPI(
+    `competitions/${WC_ID}/matches?dateFrom=${getPastDay(1)}&dateTo=${getToday()}`,
   );
 
   let matches = [];
 
-  // Live matches
-  if (data && data.matches) {
-    matches = [...data.matches];
-  }
-
-  // Today's matches
-  if (todayData && todayData.matches) {
-    todayData.matches.forEach((m) => {
-      if (!matches.find((lm) => lm.id === m.id)) {
-        matches.push(m);
-      }
-    });
+  if (data && data.matches && data.matches.length > 0) {
+    matches = data.matches;
+  } else {
+    console.warn("⚠️ No matches found from API for today/yesterday range.");
   }
 
   if (matches.length > 0) {
     renderAPIScoreStrip(matches);
+    checkForGoals(matches);
+  } else {
+    console.warn("⚠️ Score strip NOT updated — keeping existing/demo data.");
   }
 }
 
@@ -66,6 +67,10 @@ async function fetchSchedule() {
 
   if (data && data.matches && data.matches.length > 0) {
     renderAPISchedule(data.matches);
+  } else {
+    console.warn(
+      "⚠️ No scheduled matches found — keeping existing/demo schedule.",
+    );
   }
 }
 
@@ -77,6 +82,8 @@ async function fetchStandings() {
 
   if (data && data.standings) {
     renderAPIStandings(data.standings);
+  } else {
+    console.warn("⚠️ No standings found — keeping existing/demo table.");
   }
 }
 
@@ -249,6 +256,12 @@ function renderAPIStandings(standings) {
 // -----------------------------------------------
 function getToday() {
   return new Date().toISOString().split("T")[0];
+}
+
+function getPastDay(days) {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return d.toISOString().split("T")[0];
 }
 
 function getNextDays(days) {
